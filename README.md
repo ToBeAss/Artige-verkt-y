@@ -1,3 +1,3 @@
-Test
-Yes, I work :)
-Writing from my new MacBook Air
+| Test | 1 |
+| Yes, I work :) | 2 |
+| Writing from my new MacBook Air | 3 |
