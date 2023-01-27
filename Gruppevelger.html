@@ -10,24 +10,51 @@
             text-align: center;
         }
         input {
-            width: 50px;
+            width: 35px;
+            height: 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            background-color: snow;
+            margin: 10px 5px 10px 5px;
+        }
+        div input {
+            width: 100px;
+            height: 20px;
+        }
+        button {
+            width: 81px;
+            height: 50px;
+            border-radius: 10px;
+            background-color: #FF284C;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        p {
+            font-size: 20px;
+            line-height: 30px;
         }
     </style>
 </head>
 <body>
     <h1>"Hvem får være på gruppe med meg"-hjulet</h1>
-    <label>Deltagere</label>
-    <input id="deltagere" type="number" value="4" min="2">
-    <input id="grupper" type="number" value="2" min="2">
-    <label>Grupper</label>
-    <div></div>
-    <br>
-    <button>Spinn hjulet</button>
+    <form>
+        <label>Deltagere</label>
+        <input id="deltagere" type="number" value="4" min="2" required>
+        <input id="grupper" type="number" value="2" min="2" required>
+        <label>Grupper</label>
+        <div></div>
+        <button type="submit">SPINN HJULET</button>
+    </form>
     <p id="resultat">Resultat</p>
 
     <script>
+        const form = document.querySelector("form");
         const antallDeltagere = document.getElementById("deltagere");
         const antallGrupper = document.getElementById("grupper");
+        const navnDisplay = document.querySelector("div");
         const knapp = document.querySelector("button");
         const resultat = document.getElementById("resultat");
 
@@ -42,12 +69,20 @@
 
         function oppdaterDeltagere ()
         {
+            for (let i = 0; i < deltagere.length; i++)
+            {
+                deltagere[i].remove();
+            }
             deltagere = [];
+
             for (let i = 0; i < antallDeltagere.value; i++)
             {
-                deltagere.push(i+1);
+                let navnInput = document.createElement("input")
+                deltagere.push(navnInput);
+                navnDisplay.appendChild(navnInput);
+                navnInput.type = "text";
+                navnInput.required = true;
             }
-            
         }
 
         function oppdaterGrupper ()
@@ -65,12 +100,13 @@
             resultat.innerHTML = "";
             for (let i = 0; i < antallGrupper.value; i++)
             {
-                resultat.innerHTML += "Gruppe " + (i+1) + ": " + grupper[i] + "<br>";
+                resultat.innerHTML += "<b>Gruppe " + (i+1) + ":</b> " + grupper[i] + "<br>";
             }
         }
 
-        knapp.onclick = function ()
+        form.onsubmit = function (event)
         {
+            event.preventDefault();
             antallDeltagere.disabled = true;
             antallGrupper.disabled = true;
 
@@ -79,7 +115,7 @@
                 let tilfeldigDeltager = deltagere[Math.floor(Math.random()* deltagere.length)];
                 deltagere.splice(deltagere.indexOf(tilfeldigDeltager), 1);
 
-                grupper[ferdigValgt % antallGrupper.value].push(tilfeldigDeltager);
+                grupper[ferdigValgt % antallGrupper.value].push(tilfeldigDeltager.value);
 
                 oppdaterResultat();
                 ferdigValgt++;
