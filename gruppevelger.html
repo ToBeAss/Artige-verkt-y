@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gruppevelger</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        input {
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>"Hvem får være på gruppe med meg"-hjulet</h1>
+    <label>Deltagere</label>
+    <input id="deltagere" type="number" value="4" min="2">
+    <input id="grupper" type="number" value="2" min="2">
+    <label>Grupper</label>
+    <div></div>
+    <br>
+    <button>Spinn hjulet</button>
+    <p id="resultat">Resultat</p>
+
+    <script>
+        const antallDeltagere = document.getElementById("deltagere");
+        const antallGrupper = document.getElementById("grupper");
+        const knapp = document.querySelector("button");
+        const resultat = document.getElementById("resultat");
+
+        var deltagere = [];
+        var grupper = [];
+        var ferdigValgt = 0;
+
+        oppdaterDeltagere();
+        oppdaterGrupper();
+        antallDeltagere.onchange = function () {oppdaterDeltagere();}
+        antallGrupper.onchange = function () {oppdaterGrupper();}
+
+        function oppdaterDeltagere ()
+        {
+            deltagere = [];
+            for (let i = 0; i < antallDeltagere.value; i++)
+            {
+                deltagere.push(i+1);
+            }
+            
+        }
+
+        function oppdaterGrupper ()
+        {
+            grupper = [];
+            for (let i = 0; i < antallGrupper.value; i++)
+            {
+                grupper.push([]);
+            }
+            oppdaterResultat();
+        }
+
+        function oppdaterResultat ()
+        {
+            resultat.innerHTML = "";
+            for (let i = 0; i < antallGrupper.value; i++)
+            {
+                resultat.innerHTML += "Gruppe " + (i+1) + ": " + grupper[i] + "<br>";
+            }
+        }
+
+        knapp.onclick = function ()
+        {
+            antallDeltagere.disabled = true;
+            antallGrupper.disabled = true;
+
+            if (ferdigValgt < antallDeltagere.value)
+            {
+                let tilfeldigDeltager = deltagere[Math.floor(Math.random()* deltagere.length)];
+                deltagere.splice(deltagere.indexOf(tilfeldigDeltager), 1);
+
+                grupper[ferdigValgt % antallGrupper.value].push(tilfeldigDeltager);
+
+                oppdaterResultat();
+                ferdigValgt++;
+            }
+        }
+    </script>
+</body>
+</html>
